@@ -7,7 +7,7 @@ s = socket.socket(socket.AF_INET,
                   socket.IPPROTO_SCTP)
 
 # Get local Host machine name
-host = socket.gethostname()
+host = '127.0.0.1'
 port = 22222
 
 # Bind to port
@@ -16,17 +16,18 @@ try:
 except socket.error as msg:
     print("Bind failed. Error Code : " + str(msg[0]) + " Message " + msg[1])
     sys.exit()
-print("Socket bind complete")
+print("Socket bind complete, IP: " + str(host) + ", port:" + str(port))
 
 # Listen for a single transmission
 s.listen(1)
 print("Socket now listening")
 
 while(True):
-    client = s.accept()
+    client, addr = s.accept()
     print("Connection Accepted")
     
     data = client.recv(1024)
     print("Data received: ", data)
 
     client.close()
+    sys.exit()
