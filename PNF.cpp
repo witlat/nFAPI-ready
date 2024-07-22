@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
     const char* server_ip = NULL;
     int server_port = SERVER_PORT;
 
-    if(argc == 3) {     //user provided IP and PORT
+    if(argc == 3) {     // User provided IP and PORT
         server_ip = argv[1];
         server_port = atoi(argv[2]);
         if(server_port < 1 || server_port > 65535) {
@@ -14,10 +14,10 @@ int main(int argc, char* argv[])
             return 1;
         }
     }
-    else if(argc == 2) {    //user provided only IP
+    else if(argc == 2) {    // User provided only IP
         server_ip = argv[1];
     }
-    else {    //user provided something wrong
+    else {    // User provided invalid number of arguments
         printf("Usage: %s [SERVER IP ADDRESS] (optional [SERVER PORT])\n", argv[0]);
         return 2;
     }
@@ -63,9 +63,6 @@ int main(int argc, char* argv[])
         perror("recv");
         return 7;
     }
-
-    printf("%s\n", buf);
-
 
     printf("Closing...\n");
     if(close(client_fd) == -1) {
