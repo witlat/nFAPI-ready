@@ -48,7 +48,9 @@ int main(int argc, char* argv[])
     char buf[1024];
     printf("Sending message\n");
 
-    memset(buf, 0, sizeof(buf));  //placeholder
+    //placeholder
+    memset(buf, 0, sizeof(buf));
+    snprintf(buf, sizeof(buf)-1, "DATA 0");
 
     if(send(client_fd, &buf, strlen(buf), 0) == -1) {
         perror("send");
