@@ -6,7 +6,6 @@
 #include <arpa/inet.h>
 
 
-const int SERVER_PORT = 22222;
 const int ADDR_FAMILY = AF_INET;
 const int SOCK_TYPE = SOCK_STREAM;
 const int PROTO = IPPROTO_SCTP;

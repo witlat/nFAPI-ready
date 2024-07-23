@@ -6,7 +6,7 @@ void fill_message(PNF_READY &message)
 
     message.message_header.termination_type = 0x01;
     message.message_header.phy_id           = 0;
-    message.message_header.message_id       = 7;    // Arbitraty, the actual ID was not defined in (provied) SCF 225
+    message.message_header.message_id       = 7;    // Arbitrary, the actual ID was not defined in (provied) SCF 225
     message.message_header.length           = sizeof(message.version_info);
 
     message.nfapi_header.segment_length     = message.message_header.length + sizeof(message.message_header);
@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 {
     int client_fd = 0;
     const char* server_ip = NULL;
-    int server_port = SERVER_PORT;
+    int server_port = 0;
 
     if(argc == 3) {     // User provided IP and PORT
         server_ip = argv[1];
@@ -30,9 +30,7 @@ int main(int argc, char* argv[])
             return 1;
         }
     }
-    else if(argc == 2) {    // User provided only IP
-        server_ip = argv[1];
-    }
+
     else {    // User provided invalid number of arguments
         printf("Usage: %s [SERVER IP ADDRESS] (optional [SERVER PORT])\n", argv[0]);
         return 2;
