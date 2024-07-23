@@ -1,7 +1,5 @@
 import socket
 import sys
-import ctypes
-import array
 from ctypes import *
 
 # Create an SCTP socket object
@@ -9,7 +7,6 @@ s = socket.socket(socket.AF_INET,
                   socket.SOCK_STREAM,
                   socket.IPPROTO_SCTP)
 
-# Get local Host machine name
 host = '127.0.0.1'
 port = 22222
 

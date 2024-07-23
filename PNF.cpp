@@ -2,11 +2,11 @@
 
 void fill_message(PNF_READY &message)
 {
-    message.version_info                    = 1;
+    message.version_info                    = 1;    // Inverse order to call sizeof() later
 
     message.message_header.termination_type = 0x01;
     message.message_header.phy_id           = 0;
-    message.message_header.message_id       = 7;    // The actual ID was not defined in (provied) SCF 225, but SCF 222 instead
+    message.message_header.message_id       = 7;    // Arbitraty, the actual ID was not defined in (provied) SCF 225
     message.message_header.length           = sizeof(message.version_info);
 
     message.nfapi_header.segment_length     = message.message_header.length + sizeof(message.message_header);
@@ -38,7 +38,8 @@ int main(int argc, char* argv[])
         return 2;
     }
 
-    if((client_fd = socket(ADDR_FAMILY, SOCK_TYPE, PROTO)) == -1) {
+    client_fd = socket(ADDR_FAMILY, SOCK_TYPE, PROTO);
+    if(client_fd == -1) {
         perror("socket");
         return 3;
     }
@@ -64,23 +65,16 @@ int main(int argc, char* argv[])
     char buf[20];
     printf("Sending message\n");
 
-    //placeholder
     memset(buf, 0, sizeof(buf));
     PNF_READY message;
     fill_message(message);
     int offset = 0;
-    memcpy(buf, (const unsigned char*)&message.nfapi_header, sizeof(message.nfapi_header));
-    offset += sizeof(message.nfapi_header);
-    memcpy(buf+offset, (const unsigned char*)&message.message_header, sizeof(message.message_header));
-    offset += sizeof(message.message_header);
-    memcpy(buf+offset, (const unsigned char*)&message.version_info, sizeof(message.version_info));
+    memcpy(buf, (const unsigned char*)&message, sizeof(message));
 
     if(send(client_fd, &buf, sizeof(buf), 0) == -1) {
         perror("send");
         return 6;
     }
-
-    memset(buf, 0, sizeof(buf));
     
     printf("Closing...\n");
     if(close(client_fd) == -1) {
