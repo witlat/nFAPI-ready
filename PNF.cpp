@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
     memset(buf, 0, sizeof(buf));
     PNF_READY message;
     fill_message(message);
-    snprintf(buf, sizeof(buf)-1, "DATA 0");
+    snprintf(buf, sizeof(buf)-1, "DATA 0, padding to 20 bytes");
 
     if(send(client_fd, &buf, strlen(buf), 0) == -1) {
         perror("send");

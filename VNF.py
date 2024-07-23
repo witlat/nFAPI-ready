@@ -1,5 +1,7 @@
 import socket
 import sys
+import ctypes
+import array
 from ctypes import *
 
 # Create an SCTP socket object
@@ -12,22 +14,18 @@ host = '127.0.0.1'
 port = 22222
 
 # C structure mapping
-class nfapi_header(Structure):
+class PNF_READY(Structure):
     _fields_ = [("segment_length",      c_int, 16),
                 ("more",                c_int, 1),
                 ("segment_number",      c_int, 7),
                 ("sequence_number",     c_int, 8),
-                ("transit_timestamp",   c_int, 32)]
-    
-class message_header(Structure):
-    _fields_ = [("termination_type",    c_int, 8),
+                ("transit_timestamp",   c_int, 32),
+
+                ("termination_type",    c_int, 8),
                 ("phy_id",              c_int, 8),
                 ("message_id",          c_int, 16),
-                ("length",              c_int, 32)]
+                ("length",              c_int, 32),
 
-class PNF_READY(Structure):
-    _fields_ = [("nfapi_header",        nfapi_header),
-                ("message_header",      message_header),
                 ("version_info",        c_uint32)]
 
 # Bind to port
@@ -46,19 +44,21 @@ while(True):
     client, addr = s.accept()
     print("Connection Accepted")
     
-    data : PNF_READY = client.recv(32)
-    print("Data received.\nSegment length =", getattr(data, "segment_length"))
-    print("More flag =", getattr(data, "more"))
-    print("Segment number =", getattr(data, "segment_number"))
-    print("Sequence number =", getattr(data, "sequence_number"))
-    print("Timestamp =", getattr(data, "transit_timestamp"))
+    raw = client.recv(32)
+    data = PNF_READY.from_buffer_copy(raw)
 
-    print("Termination type =", getattr(data, "termination_type"))
-    print("Termination type =", getattr(data, "phy_id"))
-    print("Termination type =", getattr(data, "message_id"))
-    print("Termination type =", getattr(data, "length"))
+    print("Data received.\nSegment length =", data.segment_length)
+    print("More flag =", data.more)
+    print("Segment number =", data.segment_number)
+    print("Sequence number =", data.sequence_number)
+    print("Timestamp =", data.transit_timestamp)
 
-    print("Version info =", getattr(data, "version_info"))
+    print("Termination type =", data.termination_type)
+    print("Termination type =", data.phy_id)
+    print("Termination type =", data.message_id)
+    print("Termination type =", data.length)
+
+    print("Version info =", data.version_info)
 
     client.close()
     sys.exit()
