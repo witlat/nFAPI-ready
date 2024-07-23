@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     }
 
     else {    // User provided invalid number of arguments
-        printf("Usage: %s [SERVER IP ADDRESS] (optional [SERVER PORT])\n", argv[0]);
+        printf("Usage: %s [SERVER IP ADDRESS] [SERVER PORT]\n", argv[0]);
         return 2;
     }
 
