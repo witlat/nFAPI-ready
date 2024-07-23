@@ -6,7 +6,7 @@ void fill_message(PNF_READY &message)
 
     message.message_header.termination_type = 0x01;
     message.message_header.phy_id           = 0;
-    message.message_header.message_id       = 0;
+    message.message_header.message_id       = 7;    // The actual ID was not included in spec
     message.message_header.length           = sizeof(message.version_info);
 
     message.nfapi_header.segment_length     = message.message_header.length + sizeof(message.message_header);
@@ -68,24 +68,24 @@ int main(int argc, char* argv[])
     memset(buf, 0, sizeof(buf));
     PNF_READY message;
     fill_message(message);
-    snprintf(buf, sizeof(buf)-1, "DATA 0, padding to 20 bytes");
+    int offset = 0;
+    memcpy(buf, (const unsigned char*)&message.nfapi_header, sizeof(message.nfapi_header));
+    offset += sizeof(message.nfapi_header);
+    memcpy(buf+offset, (const unsigned char*)&message.message_header, sizeof(message.message_header));
+    offset += sizeof(message.message_header);
+    memcpy(buf+offset, (const unsigned char*)&message.version_info, sizeof(message.version_info));
 
-    if(send(client_fd, &buf, strlen(buf), 0) == -1) {
+    if(send(client_fd, &buf, sizeof(buf), 0) == -1) {
         perror("send");
         return 6;
     }
 
     memset(buf, 0, sizeof(buf));
-
-    if(recv(client_fd, &buf, sizeof(buf), 0) == -1) {
-        perror("recv");
-        return 7;
-    }
-
+    
     printf("Closing...\n");
     if(close(client_fd) == -1) {
         perror("close");
-        return 8;
+        return 7;
     }
 
     return 0;

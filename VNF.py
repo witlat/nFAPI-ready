@@ -47,17 +47,18 @@ while(True):
     raw = client.recv(32)
     data = PNF_READY.from_buffer_copy(raw)
 
-    print("Data received.\nSegment length =", data.segment_length)
+    print("Data received.\n--nFAPI header--")
+    print("Segment length =", data.segment_length)
     print("More flag =", data.more)
     print("Segment number =", data.segment_number)
     print("Sequence number =", data.sequence_number)
     print("Timestamp =", data.transit_timestamp)
-
+    print("--Message header--")
     print("Termination type =", data.termination_type)
-    print("Termination type =", data.phy_id)
-    print("Termination type =", data.message_id)
-    print("Termination type =", data.length)
-
+    print("PHY ID =", data.phy_id)
+    print("Message ID =", data.message_id)
+    print("Message length =", data.length)
+    print("--Message--")
     print("Version info =", data.version_info)
 
     client.close()
