@@ -6,7 +6,7 @@ void fill_message(PNF_READY &message)
 
     message.message_header.termination_type = 0x01;
     message.message_header.phy_id           = 0;
-    message.message_header.message_id       = 7;    // The actual ID was not included in spec
+    message.message_header.message_id       = 7;    // The actual ID was not defined in (provied) SCF 225, but SCF 222 instead
     message.message_header.length           = sizeof(message.version_info);
 
     message.nfapi_header.segment_length     = message.message_header.length + sizeof(message.message_header);
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 
     printf("OK\n");
 
-    char buf[32];
+    char buf[20];
     printf("Sending message\n");
 
     //placeholder
