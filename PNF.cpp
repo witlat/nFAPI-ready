@@ -1,5 +1,21 @@
 #include "PNF.hpp"
 
+void fill_message(PNF_READY &message)
+{
+    message.version_info                    = 1;
+
+    message.message_header.termination_type = 0x01;
+    message.message_header.phy_id           = 0;
+    message.message_header.message_id       = 0;
+    message.message_header.length           = sizeof(message.version_info);
+
+    message.nfapi_header.segment_length     = message.message_header.length + sizeof(message.message_header);
+    message.nfapi_header.more               = false;
+    message.nfapi_header.segment_number     = 0;
+    message.nfapi_header.sequence_number    = 0;
+    message.nfapi_header.transit_timestamp  = 0;    // Defined as 0 in the spec
+}
+
 int main(int argc, char* argv[])
 {
     int client_fd = 0;
@@ -45,11 +61,13 @@ int main(int argc, char* argv[])
 
     printf("OK\n");
 
-    char buf[1024];
+    char buf[32];
     printf("Sending message\n");
 
     //placeholder
     memset(buf, 0, sizeof(buf));
+    PNF_READY message;
+    fill_message(message);
     snprintf(buf, sizeof(buf)-1, "DATA 0");
 
     if(send(client_fd, &buf, strlen(buf), 0) == -1) {

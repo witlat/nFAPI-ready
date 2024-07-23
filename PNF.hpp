@@ -18,12 +18,13 @@ struct PNF_READY {
         unsigned int    segment_number      : 7;
         unsigned int    sequence_number     : 8;
         unsigned int    transit_timestamp   : 32;
-    };
+    } nfapi_header;
     struct message_header {
         unsigned int    termination_type    : 8;
         unsigned int    phy_id              : 8;
         unsigned int    message_id          : 16;
         unsigned int    length              : 32;
-    };
+    } message_header;
     uint32_t version_info;
+    // Padding ommited as it is technically the last message
 };
