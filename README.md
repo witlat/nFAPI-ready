@@ -31,7 +31,7 @@ Then, prepare and execute the Cmake script
 
 > make
 
-You should now have a compiled executable simply called VNF. Execute it while the PNF.py is running (otherwise the connection will fail) by passing to it the local IP and port that PNF is listening on
-> ./VNF 127.0.0.1 22222
+You should now have a compiled executable simply called PNF. Execute it while the VNF.py is running (otherwise the connection will fail) by passing to it the local IP and port that VNF is listening on
+> ./PNF 127.0.0.1 22222
 
-This should print out the message contents received by PNF in the first terminal instance. Both components should then terminate.
+This should print out the message contents received by VNF in the first terminal instance. Both components should then terminate.
