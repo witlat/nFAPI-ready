@@ -1,4 +1,4 @@
-#include "common.h"
+#include "PNF.hpp"
 
 int main(int argc, char* argv[])
 {
